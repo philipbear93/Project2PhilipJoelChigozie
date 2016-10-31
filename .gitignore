@@ -31,6 +31,9 @@ $RECYCLE.BIN/
 # Thumbnails
 ._*
 
+# Microsoft Office Binary Files
+~$*.*
+
 # Files that might appear in the root of a volume
 .DocumentRevisions-V100
 .fseventsd
@@ -45,3 +48,4 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+*.asv
