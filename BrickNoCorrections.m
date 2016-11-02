@@ -123,14 +123,6 @@ if strcmp(mode,'make')||strcmp(mode,'istrainforces')
       E=bprops(1);
       G=bprops(2);
       rho=bprops(3);
-%       A1=bprops(4);
-%       A2=bprops(5);
-%       J1=bprops(6);
-%       J2=bprops(7);
-%       Izz1=bprops(8);
-%       Izz2=bprops(9);
-%       Iyy1=bprops(10);
-%       Iyy2=bprops(11);
   else
       warndlg(['The number of material properties set for ' ...
                'this element (' num2str(length(bprops)) ') isn''t ' ...
@@ -220,8 +212,14 @@ if strcmp(mode,'make')
   %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  bn1=bnodes(1);bn2=bnodes(2);
-  indices=[bn1*6+(-5:0) bn2*6+(-5:0)] ;
+  bn1=bnodes(1);
+  bn2=bnodes(2);
+  bn3=bnodes(3);
+  bn4=bnodes(4);
+  bn5=bnodes(5);
+  bn6=bnodes(6);
+  bn7=bnodes(7);
+  bn8=bnodes(8);
 
 
   K(indices,indices)=K(indices,indices)+Ke;
@@ -249,7 +247,12 @@ if strcmp(mode,'make')
   % You need to uncomment this line and assign values to node1,
   % node2, node3, and node4 in order to draw A SINGLE SURFACE. For
   % a brick, you need 6 lines like this. 
-  %surfs=[surfs;node1 node2 node3 node4 panelcolor];
+  surfs=[surfs;bn1 bn2 bn3 bn4 panelcolor];
+  surfs=[surfs;bn2 bn6 bn7 bn3 panelcolor];
+  surfs=[surfs;bn6 bn5 bn8 bn7 panelcolor];
+  surfs=[surfs;bn5 bn1 bn4 bn8 panelcolor];
+  surfs=[surfs;bn4 bn8 bn7 bn3 panelcolor];
+  surfs=[surfs;bn1 bn5 bn6 bn2 panelcolor];
   
   %Each surface can have a different color if you like. Just change
   %the last three numbers on the row corresponding to that
