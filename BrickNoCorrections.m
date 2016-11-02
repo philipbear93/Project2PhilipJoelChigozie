@@ -220,6 +220,8 @@ if strcmp(mode,'make')
   bn6=bnodes(6);
   bn7=bnodes(7);
   bn8=bnodes(8);
+  indices=[bn1*3+(-2:0) bn2*3+(-2:0) bn3*3+(-2:0) bn4*3+(-2:0)...
+           bn5*3+(-2:0) bn6*3+(-2:0) bn7*3+(-2:0) bn8*3+(-2:0)] ;
 
 
   K(indices,indices)=K(indices,indices)+Ke;
