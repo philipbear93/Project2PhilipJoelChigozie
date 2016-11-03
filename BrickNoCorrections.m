@@ -84,7 +84,7 @@ end
 if strcmp(mode,'make')||strcmp(mode,'istrainforces')
   elnum=b;% When this mode is called, the element number is given
           % as the second input.
-%  bnodes=[element(elnum).nodes element(elnum).point];% The point is
+bnodes=[element(elnum).nodes];% The point is
                                                      % referred to
                                                      % as node 4
                                                      % below,
@@ -220,8 +220,8 @@ if strcmp(mode,'make')
   bn6=bnodes(6);
   bn7=bnodes(7);
   bn8=bnodes(8);
-  indices=[bn1*3+(-2:0) bn2*3+(-2:0) bn3*3+(-2:0) bn4*3+(-2:0)...
-           bn5*3+(-2:0) bn6*3+(-2:0) bn7*3+(-2:0) bn8*3+(-2:0)] ;
+  indices=[bn1*6+(-5:-3) bn2*6+(-5:-3) bn3*6+(-5:-3) bn4*6+(-5:-3)...
+           bn5*6+(-5:-3) bn6*6+(-5:-3) bn7*6+(-5:-3) bn8*6+(-5:-3)] ;
 
 
   K(indices,indices)=K(indices,indices)+Ke;
@@ -233,8 +233,17 @@ if strcmp(mode,'make')
   % array and that line will always be drawn.
   numlines=size(lines,1);
   lines(numlines+1,:)=[bn1 bn2];
-
-  
+  lines(numlines+2,:)=[bn2 bn3];
+  lines(numlines+3,:)=[bn3 bn4];
+  lines(numlines+4,:)=[bn4 bn1];
+  lines(numlines+5,:)=[bn5 bn6];
+  lines(numlines+6,:)=[bn6 bn7];
+  lines(numlines+7,:)=[bn7 bn8];
+  lines(numlines+8,:)=[bn8 bn5];
+  lines(numlines+9,:)=[bn1 bn5];
+  lines(numlines+10,:)=[bn2 bn6];
+  lines(numlines+11,:)=[bn3 bn7];
+  lines(numlines+12,:)=[bn4 bn8];
   
   %If I have 4 nodes that I want to use to represent a surface, I
   %do the following.
