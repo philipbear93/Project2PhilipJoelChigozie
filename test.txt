@@ -33,9 +33,10 @@ fix clamp
 4
 
 load 
-8 1 -1000
+8 2 -100
 
 actions
 staticanalysis
 plotdeformed
 X
+end
