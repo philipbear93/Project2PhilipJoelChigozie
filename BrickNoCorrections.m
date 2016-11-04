@@ -171,9 +171,9 @@ if strcmp(mode,'make')
   y8=nodes(bnodes(8),2);
   z8=nodes(bnodes(8),3);
 
-  xvec=[x1 x2 x3 x4 x5 x6 x7 x8];
-  yvec=[y1 y2 y3 y4 y5 y6 y7 y8];
-  zvec=[z1 z2 z3 z4 z5 z6 z7 z8];
+  xvec=[x1 x2 x3 x4 x5 x6 x7 x8]; % stores nodal x values in J_brick format
+  yvec=[y1 y2 y3 y4 y5 y6 y7 y8]; % stores nodal y values in J_brick format
+  zvec=[z1 z2 z3 z4 z5 z6 z7 z8]; % stores nodal z values in J_brick format
   
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %
@@ -181,28 +181,28 @@ if strcmp(mode,'make')
   %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   
-  Emat=E_matrix(E,G);
-  Me=zeros(24,24);
-  Ke=zeros(24,24);
+  Emat=E_matrix(E,G); % Calculates the E_matrix for the element material
+  Me=zeros(24,24); % Preallocates the element mass matrix
+  Ke=zeros(24,24); % Preallocates the element stiffness matrix
   
-  numbrickgauss=3;
-  [bgpts,bgpw]=gauss([numbrickgauss,numbrickgauss,numbrickgauss]);
-  for i=1:size(bgpts,2)
-      [J,dNdx,dNdy,dNdz]=J_brick(bgpts(i,1),bgpts(i,2),bgpts(i,3),xvec,yvec,zvec);
-      B=B_brick(dNdx,dNdy,dNdz);
-      Bt=B';
-      Ki=bgpw(i)*Bt*Emat*B*det(J);
-      Ke=Ke+Ki;
+  numbrickgauss=3; % Chooses a number of gauss points for the stiffness matrix
+  [bgpts,bgpw]=gauss([numbrickgauss,numbrickgauss,numbrickgauss]); % finds the gauss points and weights
+  for i=1:size(bgpts,2) % loops over all the gauss points
+      [J,dNdx,dNdy,dNdz]=J_brick(bgpts(i,1),bgpts(i,2),bgpts(i,3),xvec,yvec,zvec); % Finds J for the current Gauss point
+      B=B_brick(dNdx,dNdy,dNdz); % Finds B for the current Gauss point
+      Bt=B'; % Calculates B transpose
+      Ki=bgpw(i)*Bt*Emat*B*det(J); % Calculates the weighted Gauss point stiffness
+      Ke=Ke+Ki; % adds the weighted Gauss point stiffness to the element stiffness
   end
   
-  numbrickgauss=numbrickgauss+1;
-  [bgpts,bgpw]=gauss([numbrickgauss,numbrickgauss,numbrickgauss]);
-  for i=1:size(bgpts,2)
-      J=J_brick(bgpts(i,1),bgpts(i,2),bgpts(i,3),xvec,yvec,zvec);
-      N=N_brick(bgpts(i,1),bgpts(i,2),bgpts(i,3));
-      Nt=N';
-      Mi=bgpw(i)*Nt*rho*N*det(J);
-      Me=Me+Mi;
+  numbrickgauss=numbrickgauss+1; % Adds more gauss points for the mass matrix
+  [bgpts,bgpw]=gauss([numbrickgauss,numbrickgauss,numbrickgauss]); % finds the gauss points and weights
+  for i=1:size(bgpts,2) % loops over all the gauss points
+      J=J_brick(bgpts(i,1),bgpts(i,2),bgpts(i,3),xvec,yvec,zvec); % Finds J for the current Gauss point
+      N=N_brick(bgpts(i,1),bgpts(i,2),bgpts(i,3)); % Finds N for the current Gauss point
+      Nt=N'; % Calculates N transpose
+      Mi=bgpw(i)*Nt*rho*N*det(J); % Calculates the weighted Gauss point mass
+      Me=Me+Mi; % adds the weighted Gauss point mass to the element mass
   end
   
 
