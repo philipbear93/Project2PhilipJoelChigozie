@@ -33,10 +33,14 @@ fix clamp
 4
 
 load 
-8 2 -100
+5 2 -10
+6 2 -10
+7 2 -10
+8 2 -10
 
 actions
 staticanalysis
 plotdeformed
-X
+Xg=nonzeros(X);
+save('GlobalDeflections.mat','Xg');
 end
