@@ -187,14 +187,21 @@ if strcmp(mode,'make')
   
   numbrickgauss=5; % Chooses a number of gauss points for the stiffness matrix
   [bgpts,bgpw]=gauss([numbrickgauss,numbrickgauss,numbrickgauss]); % finds the gauss points and weights
+  
+  J0=J_brick(0,0,0,xvec,yvec,zvec);
   for i=1:size(bgpts,1) % loops over all the gauss points
       [J,dNdx,dNdy,dNdz]=J_brick(bgpts(i,1),bgpts(i,2),bgpts(i,3),xvec,yvec,zvec); % Finds J for the current Gauss point
       B=B_brick(dNdx,dNdy,dNdz); % Finds B for the current Gauss point
+      Bt=B'; % Calculates B transpose
+      Ki=bgpw(i)*Bt*Emat*B*det(J); % Calculates the weighted Gauss point stiffness
+      Ke(1:24,1:24)=Ke(1:24,1:24)+Ki(1:24,1:24); % adds the weighted Gauss point stiffness to the element stiffness
+
       Ba=Ba_brick(J,bgpts(i,1),bgpts(i,2),bgpts(i,3)); 
       B=[B Ba];
       Bt=B'; % Calculates B transpose
-      Ki=bgpw(i)*Bt*Emat*B*det(J); % Calculates the weighted Gauss point stiffness
-      Ke=Ke+Ki; % adds the weighted Gauss point stiffness to the element stiffness
+      Ki=bgpw(i)*Bt*Emat*B*det(J0); % Calculates the weighted Gauss point stiffness
+      Ke(1:33,25:33)=Ke(1:33,25:33)+Ki(1:33,25:33); % adds the weighted Gauss point stiffness to the element stiffness
+      Ke(25:33,1:24)=Ke(25:33,1:24)+Ki(25:33,1:24);
   end
   
   numbrickgauss=numbrickgauss+1; % Adds more gauss points for the mass matrix
@@ -207,7 +214,7 @@ if strcmp(mode,'make')
       Me=Me+Mi; % adds the weighted Gauss point mass to the element mass
   end
   
-  [Ke,Me]=ZeroDOFs(Ke,Me);
+  [Ke]=ZeroDOFs(Ke);
   [Ke,Me]=Guyan_Brick(Ke,Me);
   
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
