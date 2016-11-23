@@ -15,10 +15,9 @@ for i=1:8 % iterates over each node
 end
 
 J=[dNdEpsilon; dNdEta; dNdZeta]*[x' y' z']; % assembles derivative and nodal locations matrices and multiplies
-Jp=J^-1; % finds the inverse of J
 
 for i=1:8
-    Resultant=Jp*[dNdEpsilon(i); dNdEta(i); dNdZeta(i)]; % finds the cartesian derivatives
+    Resultant=J\[dNdEpsilon(i); dNdEta(i); dNdZeta(i)]; % finds the cartesian derivatives
     dNdx(i)=Resultant(1); % stores the current nodal x derivative
     dNdy(i)=Resultant(2); % stores the current nodal y derivative
     dNdz(i)=Resultant(3); % stores the current nodal z derivative
