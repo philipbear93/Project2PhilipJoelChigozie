@@ -22,9 +22,9 @@ node7 = [xvec(7) yvec(7) zvec(7)];
 node8 = [xvec(8) yvec(8) zvec(8)];
 
 if yavg == 0
-    PatchPt = [xavg yavg+1/3 zavg];
+    PatchPt = [xavg+1/3 yavg+1/3 zavg+1/3];
 else
-    PatchPt = [xavg yavg*1/3 zavg];
+    PatchPt = [xavg*1/3 yavg*1/3 zavg*1/3];
 end
 
 Bi1 = [(node1(1)+node2(1))/2, (node1(2)+node2(2))/2, (node1(3)+node2(3))/2];
@@ -46,10 +46,14 @@ Bi16 = [(Bi2(1)+Bi6(1))/2, (Bi2(2)+Bi6(2))/2, (Bi2(3)+Bi6(3))/2];
 Bi17 = [(Bi3(1)+Bi7(1))/2, (Bi3(2)+Bi7(2))/2, (Bi3(3)+Bi7(3))/2];
 Bi18 = [(Bi4(1)+Bi8(1))/2, (Bi4(2)+Bi8(2))/2, (Bi4(3)+Bi8(3))/2];
 
+Bis = [Bi1; Bi2; Bi3; Bi4; Bi5; Bi6; Bi7; Bi8; Bi9; Bi10; Bi11; Bi12; Bi13; Bi14; Bi15; Bi16; Bi17; Bi18];
+
 numlines = 0;
 
 %Element 1: node1, Bi1, Bi13, Bi4, Bi9, Bi15, PatchPt, Bi18
+%In ptout : 1, 9, 21, 12, 17, 23, 27, 26 
 Elem1 = [node1; Bi1; Bi13; Bi4; Bi9; Bi15; PatchPt; Bi18];
+Elem1pt = [1 9 21 12 17 23 27 26];
 E1xvec = Elem1(:,1);
 E1yvec = Elem1(:,2);
 E1zvec = Elem1(:,3);
@@ -57,7 +61,9 @@ E1zvec = Elem1(:,3);
 
 
 %Element 2: Bi9, Bi15, PatchPt, Bi18, node5, Bi5, Bi14, Bi8
+%In ptout : 17, 23, 27, 26, 5, 13, 22, 16
 Elem2 = [Bi9; Bi15; PatchPt; Bi18; node5; Bi5; Bi14; Bi8];
+Elem2pt = [17, 23, 27, 26, 5, 13, 22, 16];
 E2xvec = Elem2(:,1);
 E2yvec = Elem2(:,2);
 E2zvec = Elem2(:,3);
@@ -65,7 +71,9 @@ E2zvec = Elem2(:,3);
 
 
 %Element 3: Bi1, node2, Bi2, Bi13, Bi15, Bi10, Bi16, PatchPt
+%In ptout: 9, 2, 10, 21, 23, 18, 24, 27
 Elem3 = [Bi1; node2; Bi2; Bi13; Bi15; Bi10; Bi16; PatchPt];
+Elem3pt = [9, 2, 10, 21, 23, 18, 24, 27];
 E3xvec = Elem3(:,1);
 E3yvec = Elem3(:,2);
 E3zvec = Elem3(:,3);
@@ -73,7 +81,9 @@ E3zvec = Elem3(:,3);
 
 
 %Element 4: Bi15, Bi10, Bi16, PatchPt, Bi5, node6, Bi6, Bi14 
+%In ptout : 23, 18, 24, 27, 13, 6, 14, 22
 Elem4 = [Bi15; Bi10; Bi16; PatchPt; Bi5; node6; Bi6; Bi14];
+Elem4pt = [23, 18, 24, 27, 13, 6, 14, 22];
 E4xvec = Elem4(:,1);
 E4yvec = Elem4(:,2);
 E4zvec = Elem4(:,3);
@@ -81,7 +91,9 @@ E4zvec = Elem4(:,3);
 
 
 %Element 5: Bi4; Bi13; Bi3; node4; Bi18; PatchPt; Bi17; Bi12 
+%In ptout : 12, 21, 11, 4, 26, 27, 25, 20
 Elem5 = [ Bi4; Bi13; Bi3; node4; Bi18; PatchPt; Bi17; Bi12 ];
+Elem5pt = [12, 21, 11, 4, 26, 27, 25, 20];
 E5xvec = Elem5(:,1);
 E5yvec = Elem5(:,2);
 E5zvec = Elem5(:,3);
@@ -89,7 +101,9 @@ E5zvec = Elem5(:,3);
 
 
 %Element 6:  Bi18; PatchPt; Bi17; Bi12; Bi8; Bi14; Bi7; node8 
+%In ptout : 26, 27, 25, 20, 16, 22, 15, 8
 Elem6 = [Bi18; PatchPt; Bi17; Bi12; Bi8; Bi14; Bi7; node8];
+Elem6pt = [26, 27, 25, 20, 16, 22, 15, 8];
 E6xvec = Elem6(:,1);
 E6yvec = Elem6(:,2);
 E6zvec = Elem6(:,3);
@@ -97,7 +111,9 @@ E6zvec = Elem6(:,3);
 
 
 %Element 7:  Bi13; Bi2; node3; Bi3; PatchPt; Bi16, Bi11; Bi17
+%In ptout : 21, 10, 3, 11, 27, 24, 19, 25
 Elem7 = [Bi13; Bi2; node3; Bi3; PatchPt; Bi16; Bi11; Bi17];
+Elem7pt = [21, 10, 3, 11, 27, 24, 19, 25];
 E7xvec = Elem7(:,1);
 E7yvec = Elem7(:,2);
 E7zvec = Elem7(:,3);
@@ -105,13 +121,111 @@ E7zvec = Elem7(:,3);
 
 
 %Element 8:  PatchPt; Bi16; Bi11; Bi17; Bi14; Bi6; node7; Bi7
+%In ptout : 27, 24, 19, 25, 22, 14, 7, 15
 Elem8 = [PatchPt; Bi16; Bi11; Bi17; Bi14; Bi6; node7; Bi7];
+Elem8pt = [27, 24, 19, 25, 22, 14, 7, 15];
 E8xvec = Elem8(:,1);
 E8yvec = Elem8(:,2);
 E8zvec = Elem8(:,3);
 
 
+ptnum = [1:1:27]';
+pts = [xvec, yvec, zvec];
+pts = [pts;Bis;PatchPt];
+ptsout = [ptnum pts];
+rn = length(ptnum);
+
+elements = [Elem1pt; Elem2pt; Elem3pt; Elem4pt; Elem5pt; Elem6pt; Elem7pt; Elem8pt];
+% matlprops = [1 1 1 1 1 1 1 1]';
+% elements = [elements matlprops];
+te = length(elements);
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+%~~~~~~~~~~~~~~~~~~~~~~~~Printing to a file~~~~~~~~~~~~~~~~~~~~~~~~%
+
+Name = 'Patch Test';
+filename=sprintf('%s.inp',Name); %writes the input file name
+fid=fopen(filename, 'w'); %Opens the input file for writing
+
+
+fprintf(fid,'%%variables \n');
+fprintf(fid,'%%All of these actions are not the most efficient for this problem. \n');
+
+fprintf(fid,'\n');
+
+fprintf(fid,'element properties \n');
+fprintf(fid,'%% Beam format \n');
+fprintf(fid,'%% E G rho \n');
+fprintf(fid,'steel(1:3) \n');
+
+fprintf(fid,'\n');
+
+fprintf(fid,'BrickNoCorrections elements \n');
+fprintf(fid,'%%node1 node2 node3 node4 node5 node6 node7 node8 propertynumber points\n');
+
+for i = 1:te
     
+     fprintf(fid,'%d %d %d %d %d %d %d %d %d 1 1\n',i,elements(i,:,:,:,:,:,:,:));
+ 
+end
+
+fprintf(fid,'\n');
+
+fprintf(fid,'nodes \n');
+fprintf(fid,'node num, x y z, Node number isnt ever stored in nodes matrix');
+fprintf(fid,'\n');
+
+for i = 1:rn
+  
+    fprintf(fid, '%d %d %d %d\n',ptsout(i,:,:,:));
+  
+end
+
+fprintf(fid,'\n');
+
+fprintf(fid,'points \n');
+fprintf(fid,'1 1 1 1 \n');
+
+fprintf(fid,'\n');
+
+fprintf(fid,'fix clamp\n');
+fprintf(fid,'1 \n');
+fprintf(fid,'2 \n');
+fprintf(fid,'3 \n');
+fprintf(fid,'4 \n');
+
+fprintf(fid,'\n');
+
+fprintf(fid,'load\n');
+fprintf(fid,'5 2 -10 \n');
+fprintf(fid,'6 2 -10 \n');
+fprintf(fid,'7 2 -10 \n');
+fprintf(fid,'8 2 -10 \n');
+
+fprintf(fid,'\n');
+
+fprintf(fid,'actions\n');
+fprintf(fid,'modalanalysis\n');
+fprintf(fid,'who\n');
+fprintf(fid,'fs\n');
+fprintf(fid,'fsold=fs\n');
+fprintf(fid,'M=M/4;\n');
+fprintf(fid,'fs = []\n');
+fprintf(fid,'modalanalysis\n');
+fprintf(fid,'disp(''Natural Frequencies in KHz'')\n');
+fprintf(fid,'staticanalysis\n');
+fprintf(fid,'plotdeformed\n');
+fprintf(fid,'Xg=nonzeros(X);\n');
+
+fclose(fid);
+
+
+%%%%%%%%%%%%%%PLOT%%%%%%%%%%%%%%%%%%%
+
+
+plotelements = 0;
+
+if plotelements == 1; 
 lines(numlines+1,:)=[Elem1(1,:) Elem1(2,:)];
 lines(numlines+2,:)=[Elem1(2,:) Elem1(3,:)];
 lines(numlines+3,:)=[Elem1(3,:) Elem1(4,:)];
@@ -210,18 +324,14 @@ lines(numlines+95,:)=[Elem8(3,:) Elem8(7,:)];
 lines(numlines+96,:)=[Elem8(4,:) Elem8(8,:)];
 
 
-% plotline = [lines(1,1:3); lines(1,4:6)];
-% plot3(plotline(:,1), plotline(:,2), plotline(:,3));
-
-
 hold on
 for i = 1:length(lines)
     plotline = [lines(i,1:3); lines(i,4:6)];
     plot3(plotline(:,1), plotline(:,2), plotline(:,3))
     axis([-1 1 -1 1 -1 1]);
 end
+end
 
 
 
 end
-
