@@ -2,18 +2,28 @@ clear all
 close all
 clc
 
-Name = 'Example_project 2';
-filename=sprintf('%s.inp',Name); %writes the input file name
+Name = 'Example_project2';
+filename=sprintf('%s.txt',Name); %writes the input file name
 fid=fopen(filename, 'w'); %Opens the input file for writing
 
 %% 3-D brick mesh.
 
-xLength = 10; xDelta = 5; xArray = 0:xDelta:xLength;
-yLength = 10; yDelta = 5; yArray = 0:yDelta:yLength;
-zLength = 10; zDelta = 5; zArray = 0:zDelta:zLength;
+xLength = 10; xDelta = 2; xArray = -xLength/2:xDelta:xLength/2;
+yLength = 10; yDelta = 2; yArray = -yLength/2:yDelta:yLength/2;
+zLength = 10; zDelta = 2; zArray = 0:zDelta:zLength;
+
+xLengthTop=1;
+yLengthTop=1;
+numz=size(zArray,2);
+draftx=linspace(1,(xLengthTop/xLength),numz);
+drafty=linspace(1,(yLengthTop/yLength),numz);
 
 [X,Y] = meshgrid(xArray,yArray);
 [row,col] = size(X);
+
+Force=-10;
+numForces=row*col;
+dForce=Force/numForces;
 
 numberOfNodes = length(zArray)*row*col;
 nodes = zeros(numberOfNodes,4);
@@ -25,7 +35,7 @@ index = 1;
 for k = 1:length(zArray)
     for i = 1:row
         for j = 1:col
-            nodes(index,:) = [index , X(i,j), Y(i,j), zArray(k)];
+            nodes(index,:) = [index , X(i,j)*draftx(k), Y(i,j)*drafty(k), zArray(k)];
             index = index +1;
         end
     end
@@ -60,34 +70,34 @@ end
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 %~~~~~~~~~~~~~~~~~~~~~~~~Printing to a file~~~~~~~~~~~~~~~~~~~~~~~~%
 
-fprintf(fid,'%%variables \n');
-fprintf(fid,'%%All of these actions are not the most efficient for this problem. \n');
+fprintf(fid,'%% variables\n');
+fprintf(fid,'%% All of these actions are not the most efficient for this problem.\n');
 
 fprintf(fid,'\n');
 
-fprintf(fid,'element properties \n');
-fprintf(fid,'%% Beam format \n');
-fprintf(fid,'%% E G rho \n');
-fprintf(fid,'steel(1:3) \n')
+fprintf(fid,'element properties\n');
+fprintf(fid,'%% Beam format\n');
+fprintf(fid,'%% E G rho\n');
+fprintf(fid,'steel(1:3)\n');
 
 fprintf(fid,'\n');
 
-fprintf(fid,'BrickNoCorrections elements \n');
+fprintf(fid,'BrickNoCorrections elements\n');
 fprintf(fid,'%%node1 node2 node3 node4 node5 node6 node7 node8 propertynumber points\n');
 
 [rcon,ccon]=size(connections);
 
 for i = 1:NumberOfElements
     
-     fprintf(fid,'%d %d %d %d %d %d %d %d %d 1 1\n',i,connections(i,:,:,:,:,:,:,:));
+     fprintf(fid,'%d %d %d %d %d %d %d %d 1\n',connections(i,:,:,:,:,:,:,:));
  
 end
 
 fprintf(fid,'\n');
 
-fprintf(fid,'nodes \n');
+fprintf(fid,'nodes\n');
 fprintf(fid,'%% I can include comment lines\n');
-fprintf(fid,'node num, x y z, Node number isnt ever stored in nodes matrix');
+fprintf(fid,'%%node num, x y z, Node number isnt ever stored in nodes matrix\n');
 
 for i = 1:rn
   
@@ -97,24 +107,22 @@ end
 
 fprintf(fid,'\n');
 
-fprintf(fid,'points \n');
-fprintf(fid,'1 1 1 1 \n');
+fprintf(fid,'points\n');
+fprintf(fid,'1 1 1 1\n');
 
 fprintf(fid,'\n');
 
 fprintf(fid,'fix clamp\n');
-fprintf(fid,'1 \n');
-fprintf(fid,'2 \n');
-fprintf(fid,'3 \n');
-fprintf(fid,'4 \n');
+for i=1:NumberOfNodesPerLevel
+    fprintf(fid,'%i\n',i);
+end
 
 fprintf(fid,'\n');
 
 fprintf(fid,'load\n');
-fprintf(fid,'5 2 -10 \n');
-fprintf(fid,'6 2 -10 \n');
-fprintf(fid,'7 2 -10 \n');
-fprintf(fid,'8 2 -10 \n');
+for i=(numberOfNodes-NumberOfNodesPerLevel+1):numberOfNodes
+    fprintf(fid,'%d 2 %d\n',nodes(i,1),dForce);
+end
 
 fprintf(fid,'\n');
 
