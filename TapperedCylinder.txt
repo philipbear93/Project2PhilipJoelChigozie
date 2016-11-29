@@ -6,7 +6,7 @@ element properties
 %EGrho
 steel(1:3)
 
-BrickNoCorrections elements
+Brick elements
 %node1node2node3node4node5node6node7node8propertynumber
 2   9   5   3  11  18  14  12 1
 7   9   4   8  16  18  13  17 1
@@ -157,15 +157,24 @@ points
 1 1 1 1
 
 fix clamp
-91:99
+99
+
+fix surfaceball
+91 1 0 0
+91 0 1 0
+92 0 1 0
+93 0 1 0
+94 0 1 0
+95 0 1 0
+96 0 1 0
+97 0 1 0
+98 0 1 0
 
 load
-4 3 10
+9 3 -10
 
 actions
 staticanalysis
 plotdeformed
-Xg=nonzeros(X)
-%save('GlobalDeflections.mat''Xg');
-%save('Nodes.mat''nodes');
+X(1:594)
 end
