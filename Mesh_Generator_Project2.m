@@ -2,28 +2,24 @@ clear all
 close all
 clc
 
-Name = 'Example_project2';
+Name = 'SquareBeam';
 filename=sprintf('%s.txt',Name); %writes the input file name
 fid=fopen(filename, 'w'); %Opens the input file for writing
 
 %% 3-D brick mesh.
 
-xLength = 10; xDelta = 2; xArray = -xLength/2:xDelta:xLength/2;
-yLength = 10; yDelta = 2; yArray = -yLength/2:yDelta:yLength/2;
-zLength = 10; zDelta = 2; zArray = 0:zDelta:zLength;
+xLength = 74; xDelta = 18.5; xArray = -xLength/2:xDelta:xLength/2;
+yLength = 74; yDelta = 18.5; yArray = -yLength/2:yDelta:yLength/2;
+zLength = 190; zDelta = 38; zArray = 0:zDelta:zLength;
 
-xLengthTop=1;
-yLengthTop=1;
+xLengthTop=74;
+yLengthTop=74;
 numz=size(zArray,2);
 draftx=linspace(1,(xLengthTop/xLength),numz);
 drafty=linspace(1,(yLengthTop/yLength),numz);
 
 [X,Y] = meshgrid(xArray,yArray);
 [row,col] = size(X);
-
-Force=-10;
-numForces=row*col;
-dForce=Force/numForces;
 
 numberOfNodes = length(zArray)*row*col;
 nodes = zeros(numberOfNodes,4);
@@ -119,24 +115,8 @@ end
 
 fprintf(fid,'\n');
 
-fprintf(fid,'load\n');
-for i=(numberOfNodes-NumberOfNodesPerLevel+1):numberOfNodes
-    fprintf(fid,'%d 2 %d\n',nodes(i,1),dForce);
-end
-
-fprintf(fid,'\n');
-
-fprintf(fid,'actions\n');
-fprintf(fid,'modalanalysis\n');
-fprintf(fid,'who\n');
-fprintf(fid,'fs\n');
-fprintf(fid,'fsold=fs\n');
-fprintf(fid,'M=M/4;\n');
-fprintf(fid,'fs = []\n');
-fprintf(fid,'modalanalysis\n');
-fprintf(fid,'disp(''Natural Frequencies in KHz'')\n');
 fprintf(fid,'staticanalysis\n');
 fprintf(fid,'plotdeformed\n');
-fprintf(fid,'Xg=nonzeros(X);\n');
+fprintf(fid,'X\n');
 
 fclose(fid);
